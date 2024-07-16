@@ -69,6 +69,16 @@ spatial_keyword = 'SpatialET';
 [spatialdates,spatialdata] = load_allfiles_spatialET(foldername, current_site, spatial_keyword);
 spatialdates = sort(spatialdates);
 
+% sort spatialdata by date
+spatialdata_sorted = spatialdata(:,1:2);
+all_dates = datetime(spatialdata.Properties.VariableNames(3:end),"InputFormat","dd-MMM-uuuu");
+for i = 1:length(spatialdates)
+    tempdate = spatialdates(i);
+    col_idx = find(all_dates == tempdate);
+    spatialdata_sorted.(string(tempdate)) = spatialdata{:,col_idx+2};
+end
+spatialdata = spatialdata_sorted;
+
 % Load all necessary 2023 data files
 data2023 = load(filename_2023);
 sitenames = data2023.sitenames;
